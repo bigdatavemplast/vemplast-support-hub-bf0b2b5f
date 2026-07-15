@@ -1,0 +1,96 @@
+import { createFileRoute, Outlet, redirect, Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
+import { LayoutDashboard, Ticket, PlusCircle, BookOpen, LogOut, Users } from "lucide-react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+
+export const Route = createFileRoute("/_authenticated")({
+  ssr: false,
+  beforeLoad: async () => {
+    const { data, error } = await supabase.auth.getUser();
+    if (error || !data.user) throw redirect({ to: "/auth" });
+    return { user: data.user };
+  },
+  component: AppShell,
+});
+
+function AppShell() {
+  const { user } = Route.useRouteContext();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+
+  const { data: roles = [] } = useQuery({
+    queryKey: ["my-roles", user.id],
+    queryFn: async () => {
+      const { data } = await supabase.from("user_roles").select("role").eq("user_id", user.id);
+      return (data ?? []).map((r) => r.role as string);
+    },
+  });
+  const isStaff = roles.some((r) => ["atendente", "gestor", "admin"].includes(r));
+  const isAdmin = roles.includes("admin");
+
+  async function handleSignOut() {
+    await queryClient.cancelQueries();
+    queryClient.clear();
+    await supabase.auth.signOut();
+    navigate({ to: "/auth", replace: true });
+  }
+
+  const nav = [
+    { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+    { to: "/chamados/novo", icon: PlusCircle, label: "Novo chamado" },
+    { to: "/chamados", icon: Ticket, label: "Meus chamados" },
+    ...(isStaff ? [{ to: "/fila", icon: Users, label: "Fila de atendimento" }] : []),
+    { to: "/base-conhecimento", icon: BookOpen, label: "Base de conhecimento" },
+  ];
+
+  return (
+    <div className="flex min-h-screen bg-muted/20">
+      <aside className="hidden w-64 flex-col border-r bg-background md:flex">
+        <div className="flex h-16 items-center gap-2 border-b px-4 font-semibold">
+          <div className="grid h-8 w-8 place-items-center rounded-md bg-primary text-primary-foreground">
+            <Ticket className="h-4 w-4" />
+          </div>
+          <span>Vemplast SD</span>
+        </div>
+        <nav className="flex-1 space-y-1 p-3">
+          {nav.map(({ to, icon: Icon, label }) => {
+            const active = pathname === to || (to !== "/dashboard" && pathname.startsWith(to));
+            return (
+              <Link
+                key={to}
+                to={to}
+                className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors ${
+                  active ? "bg-primary text-primary-foreground" : "text-foreground hover:bg-muted"
+                }`}
+              >
+                <Icon className="h-4 w-4" />
+                {label}
+              </Link>
+            );
+          })}
+        </nav>
+        <div className="border-t p-3">
+          <div className="mb-2 truncate px-2 text-xs text-muted-foreground">{user.email}</div>
+          {isAdmin && <div className="mb-2 px-2 text-[10px] font-semibold uppercase text-primary">Admin</div>}
+          <Button variant="outline" size="sm" className="w-full" onClick={handleSignOut}>
+            <LogOut className="mr-2 h-4 w-4" /> Sair
+          </Button>
+        </div>
+      </aside>
+
+      <main className="flex-1 overflow-x-hidden">
+        <header className="flex h-16 items-center justify-between border-b bg-background px-6 md:hidden">
+          <span className="font-semibold">Vemplast SD</span>
+          <Button variant="outline" size="sm" onClick={handleSignOut}>
+            <LogOut className="h-4 w-4" />
+          </Button>
+        </header>
+        <div className="p-6">
+          <Outlet />
+        </div>
+      </main>
+    </div>
+  );
+}
