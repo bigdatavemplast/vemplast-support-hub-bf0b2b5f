@@ -12,9 +12,15 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedFilaRouteImport } from './routes/_authenticated/fila'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedChamadosIndexRouteImport } from './routes/_authenticated/chamados.index'
+import { Route as AuthenticatedBaseConhecimentoIndexRouteImport } from './routes/_authenticated/base-conhecimento.index'
 import { Route as AuthenticatedChamadosNovoRouteImport } from './routes/_authenticated/chamados.novo'
+import { Route as AuthenticatedChamadosIdRouteImport } from './routes/_authenticated/chamados.$id'
+import { Route as AuthenticatedBaseConhecimentoNovoRouteImport } from './routes/_authenticated/base-conhecimento.novo'
+import { Route as AuthenticatedBaseConhecimentoIdRouteImport } from './routes/_authenticated/base-conhecimento.$id'
+import { Route as AuthenticatedBaseConhecimentoIdEditarRouteImport } from './routes/_authenticated/base-conhecimento.$id.editar'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -30,6 +36,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedFilaRoute = AuthenticatedFilaRouteImport.update({
+  id: '/fila',
+  path: '/fila',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -41,26 +52,67 @@ const AuthenticatedChamadosIndexRoute =
     path: '/chamados/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedBaseConhecimentoIndexRoute =
+  AuthenticatedBaseConhecimentoIndexRouteImport.update({
+    id: '/base-conhecimento/',
+    path: '/base-conhecimento/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedChamadosNovoRoute =
   AuthenticatedChamadosNovoRouteImport.update({
     id: '/chamados/novo',
     path: '/chamados/novo',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedChamadosIdRoute = AuthenticatedChamadosIdRouteImport.update({
+  id: '/chamados/$id',
+  path: '/chamados/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedBaseConhecimentoNovoRoute =
+  AuthenticatedBaseConhecimentoNovoRouteImport.update({
+    id: '/base-conhecimento/novo',
+    path: '/base-conhecimento/novo',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedBaseConhecimentoIdRoute =
+  AuthenticatedBaseConhecimentoIdRouteImport.update({
+    id: '/base-conhecimento/$id',
+    path: '/base-conhecimento/$id',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedBaseConhecimentoIdEditarRoute =
+  AuthenticatedBaseConhecimentoIdEditarRouteImport.update({
+    id: '/editar',
+    path: '/editar',
+    getParentRoute: () => AuthenticatedBaseConhecimentoIdRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/fila': typeof AuthenticatedFilaRoute
+  '/base-conhecimento/$id': typeof AuthenticatedBaseConhecimentoIdRouteWithChildren
+  '/base-conhecimento/novo': typeof AuthenticatedBaseConhecimentoNovoRoute
+  '/chamados/$id': typeof AuthenticatedChamadosIdRoute
   '/chamados/novo': typeof AuthenticatedChamadosNovoRoute
+  '/base-conhecimento/': typeof AuthenticatedBaseConhecimentoIndexRoute
   '/chamados/': typeof AuthenticatedChamadosIndexRoute
+  '/base-conhecimento/$id/editar': typeof AuthenticatedBaseConhecimentoIdEditarRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/fila': typeof AuthenticatedFilaRoute
+  '/base-conhecimento/$id': typeof AuthenticatedBaseConhecimentoIdRouteWithChildren
+  '/base-conhecimento/novo': typeof AuthenticatedBaseConhecimentoNovoRoute
+  '/chamados/$id': typeof AuthenticatedChamadosIdRoute
   '/chamados/novo': typeof AuthenticatedChamadosNovoRoute
+  '/base-conhecimento': typeof AuthenticatedBaseConhecimentoIndexRoute
   '/chamados': typeof AuthenticatedChamadosIndexRoute
+  '/base-conhecimento/$id/editar': typeof AuthenticatedBaseConhecimentoIdEditarRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -68,22 +120,56 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/fila': typeof AuthenticatedFilaRoute
+  '/_authenticated/base-conhecimento/$id': typeof AuthenticatedBaseConhecimentoIdRouteWithChildren
+  '/_authenticated/base-conhecimento/novo': typeof AuthenticatedBaseConhecimentoNovoRoute
+  '/_authenticated/chamados/$id': typeof AuthenticatedChamadosIdRoute
   '/_authenticated/chamados/novo': typeof AuthenticatedChamadosNovoRoute
+  '/_authenticated/base-conhecimento/': typeof AuthenticatedBaseConhecimentoIndexRoute
   '/_authenticated/chamados/': typeof AuthenticatedChamadosIndexRoute
+  '/_authenticated/base-conhecimento/$id/editar': typeof AuthenticatedBaseConhecimentoIdEditarRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/dashboard' | '/chamados/novo' | '/chamados/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/fila'
+    | '/base-conhecimento/$id'
+    | '/base-conhecimento/novo'
+    | '/chamados/$id'
+    | '/chamados/novo'
+    | '/base-conhecimento/'
+    | '/chamados/'
+    | '/base-conhecimento/$id/editar'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/dashboard' | '/chamados/novo' | '/chamados'
+  to:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/fila'
+    | '/base-conhecimento/$id'
+    | '/base-conhecimento/novo'
+    | '/chamados/$id'
+    | '/chamados/novo'
+    | '/base-conhecimento'
+    | '/chamados'
+    | '/base-conhecimento/$id/editar'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
     | '/_authenticated/dashboard'
+    | '/_authenticated/fila'
+    | '/_authenticated/base-conhecimento/$id'
+    | '/_authenticated/base-conhecimento/novo'
+    | '/_authenticated/chamados/$id'
     | '/_authenticated/chamados/novo'
+    | '/_authenticated/base-conhecimento/'
     | '/_authenticated/chamados/'
+    | '/_authenticated/base-conhecimento/$id/editar'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -115,6 +201,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/fila': {
+      id: '/_authenticated/fila'
+      path: '/fila'
+      fullPath: '/fila'
+      preLoaderRoute: typeof AuthenticatedFilaRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -129,6 +222,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedChamadosIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/base-conhecimento/': {
+      id: '/_authenticated/base-conhecimento/'
+      path: '/base-conhecimento'
+      fullPath: '/base-conhecimento/'
+      preLoaderRoute: typeof AuthenticatedBaseConhecimentoIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/chamados/novo': {
       id: '/_authenticated/chamados/novo'
       path: '/chamados/novo'
@@ -136,18 +236,74 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedChamadosNovoRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/chamados/$id': {
+      id: '/_authenticated/chamados/$id'
+      path: '/chamados/$id'
+      fullPath: '/chamados/$id'
+      preLoaderRoute: typeof AuthenticatedChamadosIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/base-conhecimento/novo': {
+      id: '/_authenticated/base-conhecimento/novo'
+      path: '/base-conhecimento/novo'
+      fullPath: '/base-conhecimento/novo'
+      preLoaderRoute: typeof AuthenticatedBaseConhecimentoNovoRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/base-conhecimento/$id': {
+      id: '/_authenticated/base-conhecimento/$id'
+      path: '/base-conhecimento/$id'
+      fullPath: '/base-conhecimento/$id'
+      preLoaderRoute: typeof AuthenticatedBaseConhecimentoIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/base-conhecimento/$id/editar': {
+      id: '/_authenticated/base-conhecimento/$id/editar'
+      path: '/editar'
+      fullPath: '/base-conhecimento/$id/editar'
+      preLoaderRoute: typeof AuthenticatedBaseConhecimentoIdEditarRouteImport
+      parentRoute: typeof AuthenticatedBaseConhecimentoIdRoute
+    }
   }
 }
 
+interface AuthenticatedBaseConhecimentoIdRouteChildren {
+  AuthenticatedBaseConhecimentoIdEditarRoute: typeof AuthenticatedBaseConhecimentoIdEditarRoute
+}
+
+const AuthenticatedBaseConhecimentoIdRouteChildren: AuthenticatedBaseConhecimentoIdRouteChildren =
+  {
+    AuthenticatedBaseConhecimentoIdEditarRoute:
+      AuthenticatedBaseConhecimentoIdEditarRoute,
+  }
+
+const AuthenticatedBaseConhecimentoIdRouteWithChildren =
+  AuthenticatedBaseConhecimentoIdRoute._addFileChildren(
+    AuthenticatedBaseConhecimentoIdRouteChildren,
+  )
+
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedFilaRoute: typeof AuthenticatedFilaRoute
+  AuthenticatedBaseConhecimentoIdRoute: typeof AuthenticatedBaseConhecimentoIdRouteWithChildren
+  AuthenticatedBaseConhecimentoNovoRoute: typeof AuthenticatedBaseConhecimentoNovoRoute
+  AuthenticatedChamadosIdRoute: typeof AuthenticatedChamadosIdRoute
   AuthenticatedChamadosNovoRoute: typeof AuthenticatedChamadosNovoRoute
+  AuthenticatedBaseConhecimentoIndexRoute: typeof AuthenticatedBaseConhecimentoIndexRoute
   AuthenticatedChamadosIndexRoute: typeof AuthenticatedChamadosIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedFilaRoute: AuthenticatedFilaRoute,
+  AuthenticatedBaseConhecimentoIdRoute:
+    AuthenticatedBaseConhecimentoIdRouteWithChildren,
+  AuthenticatedBaseConhecimentoNovoRoute:
+    AuthenticatedBaseConhecimentoNovoRoute,
+  AuthenticatedChamadosIdRoute: AuthenticatedChamadosIdRoute,
   AuthenticatedChamadosNovoRoute: AuthenticatedChamadosNovoRoute,
+  AuthenticatedBaseConhecimentoIndexRoute:
+    AuthenticatedBaseConhecimentoIndexRoute,
   AuthenticatedChamadosIndexRoute: AuthenticatedChamadosIndexRoute,
 }
 
