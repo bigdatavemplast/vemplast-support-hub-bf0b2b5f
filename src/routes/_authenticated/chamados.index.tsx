@@ -62,7 +62,8 @@ function ChamadosPage() {
         ) : (
           <div className="divide-y">
             {chamados.map((c) => (
-              <div key={c.id} className="flex items-center justify-between p-4 hover:bg-muted/40">
+              <Link key={c.id} to="/chamados/$id" params={{ id: c.id }}
+                className="flex items-center justify-between p-4 hover:bg-muted/40">
                 <div className="min-w-0">
                   <div className="flex items-center gap-2">
                     <span className="font-mono text-xs text-muted-foreground">{c.numero}</span>
@@ -74,7 +75,7 @@ function ChamadosPage() {
                   </div>
                 </div>
                 <Badge>{statusLabel[c.status] ?? c.status}</Badge>
-              </div>
+              </Link>
             ))}
           </div>
         )}
