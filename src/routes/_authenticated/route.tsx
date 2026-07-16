@@ -82,11 +82,15 @@ function AppShell() {
       </aside>
 
       <main className="flex-1 overflow-x-hidden">
-        <header className="flex h-16 items-center justify-between border-b bg-background px-6 md:hidden">
-          <span className="font-semibold">Vemplast SD</span>
-          <Button variant="outline" size="sm" onClick={handleSignOut}>
-            <LogOut className="h-4 w-4" />
-          </Button>
+        <header className="flex h-16 items-center justify-between border-b bg-background px-6">
+          <span className="font-semibold md:hidden">Vemplast SD</span>
+          <div className="hidden md:block" />
+          <div className="flex items-center gap-2">
+            <NotificationBell userId={user.id} />
+            <Button variant="outline" size="sm" className="md:hidden" onClick={handleSignOut}>
+              <LogOut className="h-4 w-4" />
+            </Button>
+          </div>
         </header>
         <div className="p-6">
           <Outlet />
