@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { LayoutDashboard, Ticket, PlusCircle, BookOpen, LogOut, Users } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { NotificationBell } from "@/components/NotificationBell";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
@@ -81,11 +82,15 @@ function AppShell() {
       </aside>
 
       <main className="flex-1 overflow-x-hidden">
-        <header className="flex h-16 items-center justify-between border-b bg-background px-6 md:hidden">
-          <span className="font-semibold">Vemplast SD</span>
-          <Button variant="outline" size="sm" onClick={handleSignOut}>
-            <LogOut className="h-4 w-4" />
-          </Button>
+        <header className="flex h-16 items-center justify-between border-b bg-background px-6">
+          <span className="font-semibold md:hidden">Vemplast SD</span>
+          <div className="hidden md:block" />
+          <div className="flex items-center gap-2">
+            <NotificationBell userId={user.id} />
+            <Button variant="outline" size="sm" className="md:hidden" onClick={handleSignOut}>
+              <LogOut className="h-4 w-4" />
+            </Button>
+          </div>
         </header>
         <div className="p-6">
           <Outlet />

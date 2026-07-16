@@ -274,7 +274,7 @@ function DashboardPage() {
                 <tr key={c.id} className="border-b last:border-0 hover:bg-muted/40">
                   <td className="py-2 pr-3 font-medium text-muted-foreground">{c.numero}</td>
                   <td className="py-2 pr-3 font-medium">
-                    <Link to="/chamados" className="hover:underline">{c.titulo}</Link>
+                    <Link to="/chamados/$id" params={{ id: c.id }} className="hover:underline">{c.titulo}</Link>
                   </td>
                   <td className="py-2 pr-3">
                     <Badge variant="secondary" className="font-normal">{c.categoria_id ? catMap[c.categoria_id] ?? "—" : "—"}</Badge>
