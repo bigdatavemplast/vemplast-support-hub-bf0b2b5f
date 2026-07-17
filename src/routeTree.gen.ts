@@ -20,6 +20,7 @@ import { Route as AuthenticatedChamadosNovoRouteImport } from './routes/_authent
 import { Route as AuthenticatedChamadosIdRouteImport } from './routes/_authenticated/chamados.$id'
 import { Route as AuthenticatedBaseConhecimentoNovoRouteImport } from './routes/_authenticated/base-conhecimento.novo'
 import { Route as AuthenticatedBaseConhecimentoIdRouteImport } from './routes/_authenticated/base-conhecimento.$id'
+import { Route as AuthenticatedAdminUsuariosRouteImport } from './routes/_authenticated/admin.usuarios'
 import { Route as AuthenticatedAdminCategoriasRouteImport } from './routes/_authenticated/admin.categorias'
 import { Route as AuthenticatedBaseConhecimentoIdEditarRouteImport } from './routes/_authenticated/base-conhecimento.$id.editar'
 
@@ -82,6 +83,12 @@ const AuthenticatedBaseConhecimentoIdRoute =
     path: '/base-conhecimento/$id',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminUsuariosRoute =
+  AuthenticatedAdminUsuariosRouteImport.update({
+    id: '/admin/usuarios',
+    path: '/admin/usuarios',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminCategoriasRoute =
   AuthenticatedAdminCategoriasRouteImport.update({
     id: '/admin/categorias',
@@ -101,6 +108,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/fila': typeof AuthenticatedFilaRoute
   '/admin/categorias': typeof AuthenticatedAdminCategoriasRoute
+  '/admin/usuarios': typeof AuthenticatedAdminUsuariosRoute
   '/base-conhecimento/$id': typeof AuthenticatedBaseConhecimentoIdRouteWithChildren
   '/base-conhecimento/novo': typeof AuthenticatedBaseConhecimentoNovoRoute
   '/chamados/$id': typeof AuthenticatedChamadosIdRoute
@@ -115,6 +123,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/fila': typeof AuthenticatedFilaRoute
   '/admin/categorias': typeof AuthenticatedAdminCategoriasRoute
+  '/admin/usuarios': typeof AuthenticatedAdminUsuariosRoute
   '/base-conhecimento/$id': typeof AuthenticatedBaseConhecimentoIdRouteWithChildren
   '/base-conhecimento/novo': typeof AuthenticatedBaseConhecimentoNovoRoute
   '/chamados/$id': typeof AuthenticatedChamadosIdRoute
@@ -131,6 +140,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/fila': typeof AuthenticatedFilaRoute
   '/_authenticated/admin/categorias': typeof AuthenticatedAdminCategoriasRoute
+  '/_authenticated/admin/usuarios': typeof AuthenticatedAdminUsuariosRoute
   '/_authenticated/base-conhecimento/$id': typeof AuthenticatedBaseConhecimentoIdRouteWithChildren
   '/_authenticated/base-conhecimento/novo': typeof AuthenticatedBaseConhecimentoNovoRoute
   '/_authenticated/chamados/$id': typeof AuthenticatedChamadosIdRoute
@@ -147,6 +157,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/fila'
     | '/admin/categorias'
+    | '/admin/usuarios'
     | '/base-conhecimento/$id'
     | '/base-conhecimento/novo'
     | '/chamados/$id'
@@ -161,6 +172,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/fila'
     | '/admin/categorias'
+    | '/admin/usuarios'
     | '/base-conhecimento/$id'
     | '/base-conhecimento/novo'
     | '/chamados/$id'
@@ -176,6 +188,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/fila'
     | '/_authenticated/admin/categorias'
+    | '/_authenticated/admin/usuarios'
     | '/_authenticated/base-conhecimento/$id'
     | '/_authenticated/base-conhecimento/novo'
     | '/_authenticated/chamados/$id'
@@ -270,6 +283,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBaseConhecimentoIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/usuarios': {
+      id: '/_authenticated/admin/usuarios'
+      path: '/admin/usuarios'
+      fullPath: '/admin/usuarios'
+      preLoaderRoute: typeof AuthenticatedAdminUsuariosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/categorias': {
       id: '/_authenticated/admin/categorias'
       path: '/admin/categorias'
@@ -306,6 +326,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedFilaRoute: typeof AuthenticatedFilaRoute
   AuthenticatedAdminCategoriasRoute: typeof AuthenticatedAdminCategoriasRoute
+  AuthenticatedAdminUsuariosRoute: typeof AuthenticatedAdminUsuariosRoute
   AuthenticatedBaseConhecimentoIdRoute: typeof AuthenticatedBaseConhecimentoIdRouteWithChildren
   AuthenticatedBaseConhecimentoNovoRoute: typeof AuthenticatedBaseConhecimentoNovoRoute
   AuthenticatedChamadosIdRoute: typeof AuthenticatedChamadosIdRoute
@@ -318,6 +339,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedFilaRoute: AuthenticatedFilaRoute,
   AuthenticatedAdminCategoriasRoute: AuthenticatedAdminCategoriasRoute,
+  AuthenticatedAdminUsuariosRoute: AuthenticatedAdminUsuariosRoute,
   AuthenticatedBaseConhecimentoIdRoute:
     AuthenticatedBaseConhecimentoIdRouteWithChildren,
   AuthenticatedBaseConhecimentoNovoRoute:
