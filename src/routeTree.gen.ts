@@ -20,6 +20,7 @@ import { Route as AuthenticatedChamadosNovoRouteImport } from './routes/_authent
 import { Route as AuthenticatedChamadosIdRouteImport } from './routes/_authenticated/chamados.$id'
 import { Route as AuthenticatedBaseConhecimentoNovoRouteImport } from './routes/_authenticated/base-conhecimento.novo'
 import { Route as AuthenticatedBaseConhecimentoIdRouteImport } from './routes/_authenticated/base-conhecimento.$id'
+import { Route as AuthenticatedAdminCategoriasRouteImport } from './routes/_authenticated/admin.categorias'
 import { Route as AuthenticatedBaseConhecimentoIdEditarRouteImport } from './routes/_authenticated/base-conhecimento.$id.editar'
 
 const AuthRoute = AuthRouteImport.update({
@@ -81,6 +82,12 @@ const AuthenticatedBaseConhecimentoIdRoute =
     path: '/base-conhecimento/$id',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminCategoriasRoute =
+  AuthenticatedAdminCategoriasRouteImport.update({
+    id: '/admin/categorias',
+    path: '/admin/categorias',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedBaseConhecimentoIdEditarRoute =
   AuthenticatedBaseConhecimentoIdEditarRouteImport.update({
     id: '/editar',
@@ -93,6 +100,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/fila': typeof AuthenticatedFilaRoute
+  '/admin/categorias': typeof AuthenticatedAdminCategoriasRoute
   '/base-conhecimento/$id': typeof AuthenticatedBaseConhecimentoIdRouteWithChildren
   '/base-conhecimento/novo': typeof AuthenticatedBaseConhecimentoNovoRoute
   '/chamados/$id': typeof AuthenticatedChamadosIdRoute
@@ -106,6 +114,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/fila': typeof AuthenticatedFilaRoute
+  '/admin/categorias': typeof AuthenticatedAdminCategoriasRoute
   '/base-conhecimento/$id': typeof AuthenticatedBaseConhecimentoIdRouteWithChildren
   '/base-conhecimento/novo': typeof AuthenticatedBaseConhecimentoNovoRoute
   '/chamados/$id': typeof AuthenticatedChamadosIdRoute
@@ -121,6 +130,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/fila': typeof AuthenticatedFilaRoute
+  '/_authenticated/admin/categorias': typeof AuthenticatedAdminCategoriasRoute
   '/_authenticated/base-conhecimento/$id': typeof AuthenticatedBaseConhecimentoIdRouteWithChildren
   '/_authenticated/base-conhecimento/novo': typeof AuthenticatedBaseConhecimentoNovoRoute
   '/_authenticated/chamados/$id': typeof AuthenticatedChamadosIdRoute
@@ -136,6 +146,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/dashboard'
     | '/fila'
+    | '/admin/categorias'
     | '/base-conhecimento/$id'
     | '/base-conhecimento/novo'
     | '/chamados/$id'
@@ -149,6 +160,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/dashboard'
     | '/fila'
+    | '/admin/categorias'
     | '/base-conhecimento/$id'
     | '/base-conhecimento/novo'
     | '/chamados/$id'
@@ -163,6 +175,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/_authenticated/dashboard'
     | '/_authenticated/fila'
+    | '/_authenticated/admin/categorias'
     | '/_authenticated/base-conhecimento/$id'
     | '/_authenticated/base-conhecimento/novo'
     | '/_authenticated/chamados/$id'
@@ -257,6 +270,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBaseConhecimentoIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/categorias': {
+      id: '/_authenticated/admin/categorias'
+      path: '/admin/categorias'
+      fullPath: '/admin/categorias'
+      preLoaderRoute: typeof AuthenticatedAdminCategoriasRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/base-conhecimento/$id/editar': {
       id: '/_authenticated/base-conhecimento/$id/editar'
       path: '/editar'
@@ -285,6 +305,7 @@ const AuthenticatedBaseConhecimentoIdRouteWithChildren =
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedFilaRoute: typeof AuthenticatedFilaRoute
+  AuthenticatedAdminCategoriasRoute: typeof AuthenticatedAdminCategoriasRoute
   AuthenticatedBaseConhecimentoIdRoute: typeof AuthenticatedBaseConhecimentoIdRouteWithChildren
   AuthenticatedBaseConhecimentoNovoRoute: typeof AuthenticatedBaseConhecimentoNovoRoute
   AuthenticatedChamadosIdRoute: typeof AuthenticatedChamadosIdRoute
@@ -296,6 +317,7 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedFilaRoute: AuthenticatedFilaRoute,
+  AuthenticatedAdminCategoriasRoute: AuthenticatedAdminCategoriasRoute,
   AuthenticatedBaseConhecimentoIdRoute:
     AuthenticatedBaseConhecimentoIdRouteWithChildren,
   AuthenticatedBaseConhecimentoNovoRoute:
