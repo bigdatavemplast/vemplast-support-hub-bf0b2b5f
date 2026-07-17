@@ -55,6 +55,9 @@ function DetalheChamadoPage() {
 
   const [comentario, setComentario] = useState("");
   const [interno, setInterno] = useState(false);
+  const [nota, setNota] = useState(0);
+  const [avaliacaoComentario, setAvaliacaoComentario] = useState("");
+  const [uploading, setUploading] = useState(false);
 
   const { data: roles = [] } = useQuery({
     queryKey: ["my-roles", user.id],
