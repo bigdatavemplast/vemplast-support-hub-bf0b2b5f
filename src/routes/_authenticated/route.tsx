@@ -44,6 +44,10 @@ function AppShell() {
     { to: "/chamados", icon: Ticket, label: "Meus chamados" },
     ...(isStaff ? [{ to: "/fila", icon: Users, label: "Fila de atendimento" }] : []),
     { to: "/base-conhecimento", icon: BookOpen, label: "Base de conhecimento" },
+    ...(isAdmin ? [
+      { to: "/admin/categorias", icon: FolderTree, label: "Categorias (admin)" },
+      { to: "/admin/usuarios", icon: ShieldCheck, label: "Usuários (admin)" },
+    ] : []),
   ];
 
   return (
