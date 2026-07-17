@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { ArrowLeft, AlertTriangle, Clock, Loader2 } from "lucide-react";
+import { ArrowLeft, AlertTriangle, Clock, Loader2, Paperclip, Upload, Trash2, Star, Download } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/chamados/$id")({
   component: DetalheChamadoPage,
@@ -55,6 +55,9 @@ function DetalheChamadoPage() {
 
   const [comentario, setComentario] = useState("");
   const [interno, setInterno] = useState(false);
+  const [nota, setNota] = useState(0);
+  const [avaliacaoComentario, setAvaliacaoComentario] = useState("");
+  const [uploading, setUploading] = useState(false);
 
   const { data: roles = [] } = useQuery({
     queryKey: ["my-roles", user.id],
@@ -161,8 +164,69 @@ function DetalheChamadoPage() {
     onError: (e: any) => toast.error(e.message),
   });
 
+  const { data: anexos = [] } = useQuery({
+    queryKey: ["chamado-anexos", id],
+    queryFn: async () => {
+      const { data } = await supabase.from("anexos_chamado")
+        .select("id,nome_arquivo,storage_path,tamanho_bytes,content_type,criado_em,autor_id,autor:profiles(nome)")
+        .eq("chamado_id", id).order("criado_em", { ascending: false });
+      return data ?? [];
+    },
+  });
+
+  async function handleUpload(files: FileList | null) {
+    if (!files || files.length === 0) return;
+    setUploading(true);
+    try {
+      for (const file of Array.from(files)) {
+        if (file.size > 20 * 1024 * 1024) { toast.error(`${file.name}: máximo 20MB`); continue; }
+        const path = `${id}/${crypto.randomUUID()}-${file.name}`;
+        const up = await supabase.storage.from("chamados-anexos").upload(path, file, { contentType: file.type });
+        if (up.error) { toast.error(up.error.message); continue; }
+        const ins = await supabase.from("anexos_chamado").insert({
+          chamado_id: id, autor_id: user.id, nome_arquivo: file.name,
+          storage_path: path, tamanho_bytes: file.size, content_type: file.type,
+        } as never);
+        if (ins.error) toast.error(ins.error.message);
+      }
+      qc.invalidateQueries({ queryKey: ["chamado-anexos", id] });
+      toast.success("Anexos enviados");
+    } finally { setUploading(false); }
+  }
+
+  async function baixarAnexo(path: string, nome: string) {
+    const { data, error } = await supabase.storage.from("chamados-anexos").createSignedUrl(path, 60);
+    if (error || !data) return toast.error("Falha ao gerar link");
+    const a = document.createElement("a"); a.href = data.signedUrl; a.download = nome; a.click();
+  }
+
+  const removerAnexo = useMutation({
+    mutationFn: async (a: any) => {
+      await supabase.storage.from("chamados-anexos").remove([a.storage_path]);
+      const { error } = await supabase.from("anexos_chamado").delete().eq("id", a.id);
+      if (error) throw error;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["chamado-anexos", id] }),
+    onError: (e: any) => toast.error(e.message),
+  });
+
+  const avaliar = useMutation({
+    mutationFn: async () => {
+      if (nota < 1) throw new Error("Escolha uma nota");
+      const { error } = await supabase.from("chamados")
+        .update({ avaliacao_nota: nota, avaliacao_comentario: avaliacaoComentario || null, status: "fechado", fechado_em: new Date().toISOString() } as never)
+        .eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => { toast.success("Avaliação registrada"); qc.invalidateQueries({ queryKey: ["chamado", id] }); },
+    onError: (e: any) => toast.error(e.message),
+  });
+
   if (isLoading) return <div className="p-8 text-center text-sm text-muted-foreground">Carregando…</div>;
   if (!chamado) return <div className="p-8 text-center text-sm text-muted-foreground">Chamado não encontrado.</div>;
+
+  const podeAvaliar = chamado.solicitante_id === user.id && chamado.status === "resolvido" && !chamado.avaliacao_nota;
+  const jaAvaliado = chamado.avaliacao_nota != null;
 
   return (
     <div className="space-y-4">
@@ -193,6 +257,72 @@ function DetalheChamadoPage() {
             <CardHeader className="pb-2"><CardTitle className="text-sm">Descrição</CardTitle></CardHeader>
             <CardContent><p className="whitespace-pre-wrap text-sm">{chamado.descricao}</p></CardContent>
           </Card>
+
+          <Card>
+            <CardHeader className="pb-2 flex flex-row items-center justify-between">
+              <CardTitle className="text-sm flex items-center gap-2"><Paperclip className="h-4 w-4" />Anexos ({anexos.length})</CardTitle>
+              <label className="cursor-pointer">
+                <input type="file" multiple className="hidden" disabled={uploading}
+                  onChange={(e) => { handleUpload(e.target.files); e.target.value = ""; }} />
+                <span className="inline-flex items-center gap-1 rounded-md border px-2 py-1 text-xs hover:bg-muted">
+                  {uploading ? <Loader2 className="h-3 w-3 animate-spin" /> : <Upload className="h-3 w-3" />} Enviar
+                </span>
+              </label>
+            </CardHeader>
+            <CardContent className="space-y-1">
+              {anexos.length === 0 && <p className="text-xs text-muted-foreground">Nenhum anexo.</p>}
+              {anexos.map((a: any) => (
+                <div key={a.id} className="flex items-center justify-between rounded-md border px-3 py-2 text-sm">
+                  <button className="flex items-center gap-2 text-left hover:underline" onClick={() => baixarAnexo(a.storage_path, a.nome_arquivo)}>
+                    <Download className="h-3 w-3" />
+                    <span>{a.nome_arquivo}</span>
+                    <span className="text-xs text-muted-foreground">
+                      {a.tamanho_bytes ? `(${(a.tamanho_bytes / 1024).toFixed(0)} KB)` : ""} · {a.autor?.nome ?? ""}
+                    </span>
+                  </button>
+                  {(a.autor_id === user.id || roles.includes("admin")) && (
+                    <Button size="icon" variant="ghost" onClick={() => removerAnexo.mutate(a)}>
+                      <Trash2 className="h-3 w-3 text-red-500" />
+                    </Button>
+                  )}
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+
+          {podeAvaliar && (
+            <Card className="border-emerald-200 bg-emerald-50/40">
+              <CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2"><Star className="h-4 w-4 text-amber-500" />Avaliar atendimento</CardTitle></CardHeader>
+              <CardContent className="space-y-3">
+                <div className="flex gap-1">
+                  {[1, 2, 3, 4, 5].map((n) => (
+                    <button key={n} onClick={() => setNota(n)} className="p-1">
+                      <Star className={`h-6 w-6 ${n <= nota ? "fill-amber-400 text-amber-400" : "text-muted-foreground"}`} />
+                    </button>
+                  ))}
+                </div>
+                <Textarea rows={3} placeholder="Comentário (opcional)" value={avaliacaoComentario} onChange={(e) => setAvaliacaoComentario(e.target.value)} />
+                <Button disabled={nota < 1 || avaliar.isPending} onClick={() => avaliar.mutate()}>
+                  {avaliar.isPending && <Loader2 className="mr-2 h-3 w-3 animate-spin" />} Enviar avaliação e fechar
+                </Button>
+              </CardContent>
+            </Card>
+          )}
+
+          {jaAvaliado && (
+            <Card>
+              <CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2"><Star className="h-4 w-4 text-amber-500" />Avaliação</CardTitle></CardHeader>
+              <CardContent className="space-y-2">
+                <div className="flex gap-1">
+                  {[1, 2, 3, 4, 5].map((n) => (
+                    <Star key={n} className={`h-5 w-5 ${n <= (chamado.avaliacao_nota ?? 0) ? "fill-amber-400 text-amber-400" : "text-muted-foreground"}`} />
+                  ))}
+                </div>
+                {chamado.avaliacao_comentario && <p className="text-sm text-muted-foreground">"{chamado.avaliacao_comentario}"</p>}
+              </CardContent>
+            </Card>
+          )}
+
 
           {isStaff && (
             <Card>
