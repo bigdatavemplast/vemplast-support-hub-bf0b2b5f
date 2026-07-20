@@ -81,7 +81,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Service Desk — Vemplast" },
       { name: "description", content: "Portal oficial de chamados de TI e demais áreas da Vemplast." },
-      { property: "og:title", content: "Service Desk — Vemplast" },
+      { property: "og:title", content: "Mundo Vem — Service Desk" },
       { property: "og:description", content: "Portal oficial de chamados de TI e demais áreas da Vemplast." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
