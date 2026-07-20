@@ -21,7 +21,7 @@ function Landing() {
             <div className="grid h-8 w-8 place-items-center rounded-md bg-primary text-primary-foreground">
               <Ticket className="h-4 w-4" />
             </div>
-            <span>Service Desk Vemplast</span>
+            <span>Mundo Vem Service Desk</span>
           </div>
           <Link to="/auth">
             <Button>Entrar</Button>
@@ -32,7 +32,7 @@ function Landing() {
       <main className="mx-auto max-w-6xl px-6 py-20">
         <section className="mx-auto max-w-3xl text-center">
           <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-            Central de Chamados oficial da Vemplast
+            Central de Chamados oficial da Mundo Vem
           </h1>
           <p className="mt-4 text-lg text-muted-foreground">
             Abra, acompanhe e resolva chamados de TI e demais áreas em um único lugar,
