@@ -38,16 +38,32 @@ function AppShell() {
     navigate({ to: "/auth", replace: true });
   }
 
-  const nav = [
-    { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-    { to: "/chamados/novo", icon: PlusCircle, label: "Novo chamado" },
-    { to: "/chamados", icon: Ticket, label: "Meus chamados" },
-    ...(isStaff ? [{ to: "/fila", icon: Users, label: "Fila de atendimento" }] : []),
-    { to: "/base-conhecimento", icon: BookOpen, label: "Base de conhecimento" },
-    ...(isAdmin ? [
-      { to: "/admin/categorias", icon: FolderTree, label: "Categorias (admin)" },
-      { to: "/admin/usuarios", icon: ShieldCheck, label: "Usuários (admin)" },
-    ] : []),
+  const sections: { title: string; items: { to: string; icon: any; label: string }[] }[] = [
+    {
+      title: "PRINCIPAL",
+      items: [
+        { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+        { to: "/chamados/novo", icon: PlusCircle, label: "Novo chamado" },
+        { to: "/chamados", icon: Ticket, label: "Meus chamados" },
+        { to: "/base-conhecimento", icon: BookOpen, label: "Base de conhecimento" },
+      ],
+    },
+    ...(isStaff
+      ? [{
+          title: "ATENDIMENTO",
+          items: [{ to: "/fila", icon: Users, label: "Fila de atendimento" }],
+        }]
+      : []),
+    ...(isAdmin
+      ? [{
+          title: "ADMIN",
+          items: [
+            { to: "/admin", icon: ShieldCheck, label: "Painel admin" },
+            { to: "/admin/categorias", icon: FolderTree, label: "Categorias" },
+            { to: "/admin/usuarios", icon: Users, label: "Usuários" },
+          ],
+        }]
+      : []),
   ];
 
   return (
