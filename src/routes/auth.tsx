@@ -63,7 +63,7 @@ function AuthPage() {
           <div className="grid h-9 w-9 place-items-center rounded-md bg-primary text-primary-foreground">
             <Ticket className="h-5 w-5" />
           </div>
-          <span className="text-lg">Mundo Vem Service Desk</span>
+          <span className="text-lg">Mundo Vem — Service Desk</span>
         </div>
 
         <Card>
