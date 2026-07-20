@@ -74,8 +74,8 @@ function DetalheChamadoPage() {
       const { data, error } = await supabase
         .from("chamados")
         .select(`*,
-          solicitante:profiles!chamados_solicitante_id_fkey(id,nome,email,departamento),
-          atendente:profiles!chamados_atendente_id_fkey(id,nome,email),
+          solicitante:profiles!chamados_solicitante_profile_fkey(id,nome,email,departamento),
+          atendente:profiles!chamados_atendente_profile_fkey(id,nome,email),
           categoria:categorias(id,nome),
           subcategoria:subcategorias(id,nome),
           sla:slas(prioridade,tempo_resposta_h,tempo_resolucao_h)
