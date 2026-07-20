@@ -21,7 +21,7 @@ function Landing() {
             <div className="grid h-8 w-8 place-items-center rounded-md bg-primary text-primary-foreground">
               <Ticket className="h-4 w-4" />
             </div>
-            <span>Mundo Vem Service Desk</span>
+            <span>Mundo Vem — Service Desk</span>
           </div>
           <Link to="/auth">
             <Button>Entrar</Button>
@@ -61,7 +61,7 @@ function Landing() {
       </main>
 
       <footer className="border-t py-6 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} Vemplast — Uso interno.
+        © {new Date().getFullYear()} Mundo Vem — Uso interno.
       </footer>
     </div>
   );
