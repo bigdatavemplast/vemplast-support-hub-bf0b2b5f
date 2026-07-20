@@ -73,7 +73,7 @@ function AppShell() {
           <div className="grid h-8 w-8 place-items-center rounded-md bg-primary text-primary-foreground">
             <Ticket className="h-4 w-4" />
           </div>
-          <span>Vemplast SD</span>
+          <span>Mundo Vem SD</span>
         </div>
         <nav className="flex-1 space-y-4 overflow-y-auto p-3">
           {sections.map((section) => (
