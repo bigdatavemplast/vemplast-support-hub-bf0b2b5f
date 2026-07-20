@@ -75,22 +75,31 @@ function AppShell() {
           </div>
           <span>Vemplast SD</span>
         </div>
-        <nav className="flex-1 space-y-1 p-3">
-          {nav.map(({ to, icon: Icon, label }) => {
-            const active = pathname === to || (to !== "/dashboard" && pathname.startsWith(to));
-            return (
-              <Link
-                key={to}
-                to={to}
-                className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors ${
-                  active ? "bg-primary text-primary-foreground" : "text-foreground hover:bg-muted"
-                }`}
-              >
-                <Icon className="h-4 w-4" />
-                {label}
-              </Link>
-            );
-          })}
+        <nav className="flex-1 space-y-4 overflow-y-auto p-3">
+          {sections.map((section) => (
+            <div key={section.title}>
+              <p className="mb-1 px-3 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                {section.title}
+              </p>
+              <div className="space-y-1">
+                {section.items.map(({ to, icon: Icon, label }) => {
+                  const active = pathname === to || (to !== "/dashboard" && to !== "/admin" && pathname.startsWith(to)) || (to === "/admin" && pathname === "/admin");
+                  return (
+                    <Link
+                      key={to}
+                      to={to}
+                      className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors ${
+                        active ? "bg-primary text-primary-foreground" : "text-foreground hover:bg-muted"
+                      }`}
+                    >
+                      <Icon className="h-4 w-4" />
+                      {label}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </nav>
         <div className="border-t p-3">
           <div className="mb-2 truncate px-2 text-xs text-muted-foreground">{user.email}</div>
