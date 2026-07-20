@@ -47,7 +47,7 @@ function FilaPage() {
     queryKey: ["fila", status, prioridade],
     queryFn: async () => {
       let q = supabase.from("chamados")
-        .select("id,numero,titulo,status,prioridade,aberto_em,sla_resolucao_violado,categoria:categorias(nome),solicitante:profiles!chamados_solicitante_id_fkey(nome)")
+        .select("id,numero,titulo,status,prioridade,aberto_em,sla_resolucao_violado,categoria:categorias(nome),solicitante:profiles!chamados_solicitante_profile_fkey(nome)")
         .order("aberto_em", { ascending: false }).limit(200);
       if (status) q = q.eq("status", status as any);
       if (prioridade !== "__all__") q = q.eq("prioridade", prioridade as any);
