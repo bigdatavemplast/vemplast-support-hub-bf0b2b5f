@@ -85,6 +85,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:description", content: "Portal oficial de chamados de TI e demais áreas da Vemplast." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Service Desk — Vemplast" },
+      { name: "twitter:description", content: "Portal oficial de chamados de TI e demais áreas da Vemplast." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/275a0864-f77f-48b7-a83d-dfc7ae88019a/id-preview-02d9a0b2--8186a26c-8ad6-437d-953f-efd2f9d4298b.lovable.app-1784548828592.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/275a0864-f77f-48b7-a83d-dfc7ae88019a/id-preview-02d9a0b2--8186a26c-8ad6-437d-953f-efd2f9d4298b.lovable.app-1784548828592.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
