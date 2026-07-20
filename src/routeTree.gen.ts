@@ -16,6 +16,7 @@ import { Route as AuthenticatedFilaRouteImport } from './routes/_authenticated/f
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedChamadosIndexRouteImport } from './routes/_authenticated/chamados.index'
 import { Route as AuthenticatedBaseConhecimentoIndexRouteImport } from './routes/_authenticated/base-conhecimento.index'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as AuthenticatedChamadosNovoRouteImport } from './routes/_authenticated/chamados.novo'
 import { Route as AuthenticatedChamadosIdRouteImport } from './routes/_authenticated/chamados.$id'
 import { Route as AuthenticatedBaseConhecimentoNovoRouteImport } from './routes/_authenticated/base-conhecimento.novo'
@@ -60,6 +61,11 @@ const AuthenticatedBaseConhecimentoIndexRoute =
     path: '/base-conhecimento/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedChamadosNovoRoute =
   AuthenticatedChamadosNovoRouteImport.update({
     id: '/chamados/novo',
@@ -113,6 +119,7 @@ export interface FileRoutesByFullPath {
   '/base-conhecimento/novo': typeof AuthenticatedBaseConhecimentoNovoRoute
   '/chamados/$id': typeof AuthenticatedChamadosIdRoute
   '/chamados/novo': typeof AuthenticatedChamadosNovoRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
   '/base-conhecimento/': typeof AuthenticatedBaseConhecimentoIndexRoute
   '/chamados/': typeof AuthenticatedChamadosIndexRoute
   '/base-conhecimento/$id/editar': typeof AuthenticatedBaseConhecimentoIdEditarRoute
@@ -128,6 +135,7 @@ export interface FileRoutesByTo {
   '/base-conhecimento/novo': typeof AuthenticatedBaseConhecimentoNovoRoute
   '/chamados/$id': typeof AuthenticatedChamadosIdRoute
   '/chamados/novo': typeof AuthenticatedChamadosNovoRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
   '/base-conhecimento': typeof AuthenticatedBaseConhecimentoIndexRoute
   '/chamados': typeof AuthenticatedChamadosIndexRoute
   '/base-conhecimento/$id/editar': typeof AuthenticatedBaseConhecimentoIdEditarRoute
@@ -145,6 +153,7 @@ export interface FileRoutesById {
   '/_authenticated/base-conhecimento/novo': typeof AuthenticatedBaseConhecimentoNovoRoute
   '/_authenticated/chamados/$id': typeof AuthenticatedChamadosIdRoute
   '/_authenticated/chamados/novo': typeof AuthenticatedChamadosNovoRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/base-conhecimento/': typeof AuthenticatedBaseConhecimentoIndexRoute
   '/_authenticated/chamados/': typeof AuthenticatedChamadosIndexRoute
   '/_authenticated/base-conhecimento/$id/editar': typeof AuthenticatedBaseConhecimentoIdEditarRoute
@@ -162,6 +171,7 @@ export interface FileRouteTypes {
     | '/base-conhecimento/novo'
     | '/chamados/$id'
     | '/chamados/novo'
+    | '/admin/'
     | '/base-conhecimento/'
     | '/chamados/'
     | '/base-conhecimento/$id/editar'
@@ -177,6 +187,7 @@ export interface FileRouteTypes {
     | '/base-conhecimento/novo'
     | '/chamados/$id'
     | '/chamados/novo'
+    | '/admin'
     | '/base-conhecimento'
     | '/chamados'
     | '/base-conhecimento/$id/editar'
@@ -193,6 +204,7 @@ export interface FileRouteTypes {
     | '/_authenticated/base-conhecimento/novo'
     | '/_authenticated/chamados/$id'
     | '/_authenticated/chamados/novo'
+    | '/_authenticated/admin/'
     | '/_authenticated/base-conhecimento/'
     | '/_authenticated/chamados/'
     | '/_authenticated/base-conhecimento/$id/editar'
@@ -253,6 +265,13 @@ declare module '@tanstack/react-router' {
       path: '/base-conhecimento'
       fullPath: '/base-conhecimento/'
       preLoaderRoute: typeof AuthenticatedBaseConhecimentoIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/chamados/novo': {
@@ -331,6 +350,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedBaseConhecimentoNovoRoute: typeof AuthenticatedBaseConhecimentoNovoRoute
   AuthenticatedChamadosIdRoute: typeof AuthenticatedChamadosIdRoute
   AuthenticatedChamadosNovoRoute: typeof AuthenticatedChamadosNovoRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
   AuthenticatedBaseConhecimentoIndexRoute: typeof AuthenticatedBaseConhecimentoIndexRoute
   AuthenticatedChamadosIndexRoute: typeof AuthenticatedChamadosIndexRoute
 }
@@ -346,6 +366,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
     AuthenticatedBaseConhecimentoNovoRoute,
   AuthenticatedChamadosIdRoute: AuthenticatedChamadosIdRoute,
   AuthenticatedChamadosNovoRoute: AuthenticatedChamadosNovoRoute,
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
   AuthenticatedBaseConhecimentoIndexRoute:
     AuthenticatedBaseConhecimentoIndexRoute,
   AuthenticatedChamadosIndexRoute: AuthenticatedChamadosIndexRoute,
@@ -362,13 +383,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
