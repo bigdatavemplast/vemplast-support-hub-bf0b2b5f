@@ -47,6 +47,13 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "anexos_chamado_autor_profile_fkey"
+            columns: ["autor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "anexos_chamado_chamado_id_fkey"
             columns: ["chamado_id"]
             isOneToOne: false
@@ -227,6 +234,13 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "chamados_atendente_profile_fkey"
+            columns: ["atendente_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "chamados_categoria_id_fkey"
             columns: ["categoria_id"]
             isOneToOne: false
@@ -238,6 +252,13 @@ export type Database = {
             columns: ["sla_id"]
             isOneToOne: false
             referencedRelation: "slas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chamados_solicitante_profile_fkey"
+            columns: ["solicitante_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
@@ -276,6 +297,13 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "comentarios_chamado_autor_profile_fkey"
+            columns: ["autor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "comentarios_chamado_chamado_id_fkey"
             columns: ["chamado_id"]
             isOneToOne: false
@@ -313,6 +341,13 @@ export type Database = {
           para?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "historico_chamado_autor_profile_fkey"
+            columns: ["autor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "historico_chamado_chamado_id_fkey"
             columns: ["chamado_id"]
@@ -489,7 +524,15 @@ export type Database = {
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "user_roles_user_profile_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
